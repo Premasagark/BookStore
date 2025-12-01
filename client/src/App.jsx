@@ -12,6 +12,7 @@ import AddBook from "./pages/Seller/AddBook.jsx";
 import SProduct from "./pages/Seller/SProduct.jsx";
 import ABooks from "./pages/Admin/Abooks.jsx";
 import { ToastContainer } from "react-toastify";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const App = () => {
   const { showLogin } = useContext(AppContext);
@@ -25,16 +26,20 @@ const App = () => {
         {/* user side */}
         <Route path="/" element={<UHome />} />
 
-        {/* admin side */}
-        <Route path="/admin" element={<AHome />} />
-        <Route path="/admin/users" element={<AUsersList />} />
-        <Route path="/admin/sellers" element={<ASellersList />} />
-        <Route path="/admin/books" element={<ABooks />} />
+        {/* ADMIN-ONLY routes */}
+        <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+          <Route path="/admin" element={<AHome />} />
+          <Route path="/admin/users" element={<AUsersList />} />
+          <Route path="/admin/sellers" element={<ASellersList />} />
+          <Route path="/admin/books" element={<ABooks />} />
+        </Route>
 
-        {/* seller side  */}
-        <Route path="/seller" element={<SHome />} />
-        <Route path="/seller/add-book" element={<AddBook />} />
-        <Route path="/seller/product" element={<SProduct />} />
+        {/* SELLER-ONLY routes */}
+        <Route element={<ProtectedRoute allowedRoles={["seller"]} />}>
+          <Route path="/seller" element={<SHome />} />
+          <Route path="/seller/add-book" element={<AddBook />} />
+          <Route path="/seller/product" element={<SProduct />} />
+        </Route>
 
         {/* add more later: /admin/sellers, /admin/books, etc. */}
       </Routes>

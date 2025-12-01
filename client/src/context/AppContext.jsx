@@ -10,6 +10,7 @@ const AppContextProvider = (props) => {
   );
   const [showLogin, setShowLogin] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const role = (user?.role || localStorage.getItem("role") || "").toLowerCase();
 
   
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -40,6 +41,7 @@ const AppContextProvider = (props) => {
     token,
     setToken,
     logout,
+    role
   };
 
   return (
