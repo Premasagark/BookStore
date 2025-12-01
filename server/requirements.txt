@@ -1,0 +1,14 @@
+axios
+bcrypt
+cors
+dotenv
+express
+form-data
+jsonwebtoken
+mongoose
+razorpay
+body-parser 
+
+nodemon --save-dev
+
+
