@@ -1,21 +1,17 @@
 // AddBook.jsx
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import SNavBar from "../../components/SellerComponents/SNavBar";
-// import {useNavigate} from 'react-router-dom';
+import { AppContext } from "../../context/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { ALL_GENRES } from "../../assets/assets";
 
-const allGenres = [
-  "Science",
-  "Education",
-  "Fantasy (Fiction/Non-Fiction",
-  "Productivity",
-  "Children",
-  "Business",
-  "Novels",
-  "Literature",
-];
 
-const AddBook = ({ sellerId, sellerName, onCancel }) => {
-  // const navigate = useNavigate();
+
+const allGenres = ALL_GENRES;
+
+const AddBook = () => {
+  const { backendUrl, token } = useContext(AppContext);
 
   const [form, setForm] = useState({
     title: "",
@@ -42,50 +38,53 @@ const AddBook = ({ sellerId, sellerName, onCancel }) => {
     );
   };
 
-  const clearForm = (e) => {
+  const clearForm = () => {
     setForm({ title: "", author: "", price: "", description: "" });
     setGenres([]);
     setItemImage(null);
-    if (e?.target) e.target.reset();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!sellerId) {
-      alert("Seller not authenticated");
+
+    if (genres.length === 0) {
+      toast.error("Select at least one genre");
       return;
     }
-    if (genres.length === 0) {
-      alert("Select at least one genre");
+
+    if (!form.title.trim() || !form.author.trim() || !form.price) {
+      toast.error("Please fill all required fields");
       return;
     }
 
     const ok = window.confirm("Are you sure you want to add this book?");
     if (!ok) return;
 
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append("title", form.title.trim());
+    formData.append("author", form.author.trim());
+    formData.append("genres", JSON.stringify(genres));
+    formData.append("price", Number(form.price));
+    formData.append("description", form.description.trim());
+    if (itemImage) {
+      formData.append("itemImage", itemImage);
+    }
+
     try {
-      setLoading(true);
-
-      const data = new FormData();
-      data.append("title", form.title);
-      data.append("author", form.author);
-      data.append("genres", JSON.stringify(genres));
-      data.append("price", form.price);
-      data.append("description", form.description);
-      data.append("sellerId", sellerId);
-      data.append("sellerName", sellerName || "");
-      if (itemImage) data.append("itemImage", itemImage);
-
-      await fetch("/api/seller/books", {
-        method: "POST",
-        body: data,
+      await axios.post(`${backendUrl}api/seller/books`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      clearForm(e);
-      alert("Book added successfully");
+      toast.success("Book added successfully!");
+      clearForm();
     } catch (err) {
       console.error(err);
-      alert("Failed to add book");
+      toast.error(err.response?.data?.message || "Failed to add book");
     } finally {
       setLoading(false);
     }
@@ -93,116 +92,151 @@ const AddBook = ({ sellerId, sellerName, onCancel }) => {
 
   const handleCancel = () => {
     const ok = window.confirm("Discard changes?");
-    if (!ok) return;
-    clearForm();
-    // navigate("/seller");
-    onCancel && onCancel();
+    if (ok) {
+      clearForm();
+    }
   };
 
   return (
-    <section className="min-h-screen bg-green-100 ">
+    <section className="min-h-screen bg-green-100">
       <SNavBar />
       <div className="flex items-start justify-center pt-16!">
-        <div className="w-full max-w-xl bg-[#ffffff] rounded-2xl shadow-md border border-teal-50 px-8! py-10!">
+        <div className="w-full max-w-xl bg-white rounded-2xl shadow-md border border-teal-50 px-8! py-10!">
           <h1 className="text-center text-2xl md:text-3xl font-semibold text-teal-500 mb-10!">
             Add Book
           </h1>
 
-          <form onSubmit={handleSubmit} className="space-y-4!">
-            {/* title */}
-            <input
-              name="title"
-              type="text"
-              placeholder="Title"
-              value={form.title}
-              onChange={handleChange}
-              required
-              className="w-full border border-[#e0d6c4] bg-[#fffdf7] rounded-sm px-4! py-2.5! text-sm focus:outline-none focus:ring-1 focus:ring-teal-300"
-            />
+          <form onSubmit={handleSubmit} className="space-y-5!">
+            {/* Title */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2!">
+                Title *
+              </label>
+              <input
+                name="title"
+                type="text"
+                placeholder="Enter book title"
+                value={form.title}
+                onChange={handleChange}
+                required
+                className="w-full border border-teal-200 bg-[#fffdf7] rounded-lg px-4! py-3! text-sm focus:outline-none focus:ring-2 focus:ring-teal-300 focus:border-transparent"
+              />
+            </div>
 
-            {/* author */}
-            <input
-              name="author"
-              type="text"
-              placeholder="Author"
-              value={form.author}
-              onChange={handleChange}
-              required
-              className="w-full border border-[#e0d6c4] bg-[#fffdf7] rounded-sm px-4! py-2.5! text-sm focus:outline-none focus:ring-1 focus:ring-teal-300"
-            />
+            {/* Author */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2!">
+                Author *
+              </label>
+              <input
+                name="author"
+                type="text"
+                placeholder="Enter author name"
+                value={form.author}
+                onChange={handleChange}
+                required
+                className="w-full border border-teal-200 bg-[#fffdf7] rounded-lg px-4! py-3! text-sm focus:outline-none focus:ring-2 focus:ring-teal-300 focus:border-transparent"
+              />
+            </div>
 
-            {/* Genres multi-select */}
-            <div className="border border-[#e0d6c4] bg-[#fffdf7] rounded-sm px-4! py-2.5! text-sm">
-              <p className="font-medium text-gray-700 mb-2!">Genres</p>
-              <div className="grid grid-cols-2 gap-2">
+            {/* Genres */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3!">
+                Genres * (Select at least one)
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-h-full overflow-y-auto p-2! border border-teal-200 bg-[#fffdf7] rounded-lg">
                 {allGenres.map((g) => (
                   <label
                     key={g}
-                    className="flex items-center gap-2 text-xs text-gray-700"
+                    className="flex items-center gap-2 p-2! rounded cursor-pointer hover:bg-teal-50"
                   >
                     <input
                       type="checkbox"
                       value={g}
                       checked={genres.includes(g)}
                       onChange={(e) => toggleGenre(g, e.target.checked)}
-                      className="h-3.5 w-3.5 rounded border-gray-300 text-[#0f766e] focus:ring-[#0f766e]"
+                      className="h-4 w-4 rounded border-teal-300 text-teal-600 focus:ring-teal-500"
                     />
-                    <span>{g}</span>
+                    <span className="text-sm text-gray-700">{g}</span>
                   </label>
                 ))}
               </div>
+              <p
+                className={`text-xs mt-1! ${
+                  genres.length === 0 ? "text-red-500" : "text-teal-600"
+                }`}
+              >
+                {genres.length} genres selected
+              </p>
             </div>
 
-            {/* price */}
-            <input
-              name="price"
-              type="number"
-              min="0"
-              step="0.01"
-              placeholder="Price"
-              value={form.price}
-              onChange={handleChange}
-              required
-              className="w-full border border-[#e0d6c4] bg-[#fffdf7] rounded-sm px-4! py-2.5! text-sm focus:outline-none focus:ring-1 focus:ring-teal-300"
-            />
+            {/* Price */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2!">
+                Price (₹) *
+              </label>
+              <input
+                name="price"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="0.00"
+                value={form.price}
+                onChange={handleChange}
+                required
+                className="w-full border border-teal-200 bg-[#fffdf7] rounded-lg px-4! py-3! text-sm focus:outline-none focus:ring-2 focus:ring-teal-300 focus:border-transparent"
+              />
+            </div>
 
-            {/* description */}
-            <textarea
-              name="description"
-              placeholder="Description"
-              rows={3}
-              value={form.description}
-              onChange={handleChange}
-              className="w-full border border-[#e0d6c4] bg-[#fffdf7] rounded-sm px-4! py-2.5! text-sm resize-none focus:outline-none focus:ring-1 focus:ring-teal-300"
-            />
+            {/* Description */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2!">
+                Description
+              </label>
+              <textarea
+                name="description"
+                placeholder="Enter book description (optional)"
+                rows={4}
+                value={form.description}
+                onChange={handleChange}
+                className="w-full border border-teal-200 bg-[#fffdf7] rounded-lg px-4! py-3! text-sm resize-vertical focus:outline-none focus:ring-2 focus:ring-teal-300 focus:border-transparent"
+              />
+            </div>
 
-            {/* file */}
-            <div className="space-y-1! text-sm">
-              <p className="text-gray-700">Item Image</p>
+            {/* Image Upload */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2!">
+                Book Image
+              </label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                className="w-full border border-[#e0d6c4] bg-white rounded-sm px-3! py-2! text-xs file:mr-3! file:rounded-sm file:border-0 file:bg-teal-500 file:px-3 file:py-1! file:text-xs file:text-black file:cursor-pointer cursor-pointer"
+                className="w-full border border-teal-200 bg-white rounded-lg px-4! py-3! text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-teal-500 file:text-white file:font-semibold file:cursor-pointer hover:file:bg-teal-600 cursor-pointer"
               />
+              {itemImage && (
+                <p className="text-xs text-teal-600 mt-1!">
+                  {itemImage.name} selected
+                </p>
+              )}
             </div>
 
-            {/* buttons */}
-            <div className="mt-4! flex gap-3">
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex-1 bg-teal-500 text-white py-2.5! rounded-sm text-sm font-semibold shadow-md hover:bg-teal-800 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
-              >
-                {loading ? "Submitting..." : "Submit"}
-              </button>
-
+            {/* Buttons */}
+            <div className="flex gap-3 pt-4!">
               <button
                 type="button"
                 onClick={handleCancel}
-                className="flex-1 border border-teal-500 text-teal-700 py-2.5! rounded-sm text-sm font-semibold hover:bg-teal-50 cursor-pointer"
+                disabled={loading}
+                className="flex-1 border border-teal-500 text-teal-700 py-3! rounded-lg text-sm font-semibold hover:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-teal-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-3! rounded-lg text-sm font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-teal-400 disabled:opacity-70 disabled:cursor-not-allowed transition-all"
+              >
+                {loading ? "Adding Book..." : "Add Book"}
               </button>
             </div>
           </form>

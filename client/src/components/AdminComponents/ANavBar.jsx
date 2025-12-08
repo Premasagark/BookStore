@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { assets } from "../../assets/assets";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
 import { useContext } from "react";
 
@@ -14,10 +14,8 @@ const ANavBar = () => {
     { name: "Home", Link: "/admin" },
     { name: "Users", Link: "/admin/users" },
     { name: "Sellers", Link: "/admin/sellers" },
-    { name: "Books", Link: "/admin/books" },
   ];
 
-  const navigate = useNavigate();
 
   return (
     <>

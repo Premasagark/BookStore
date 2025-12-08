@@ -221,16 +221,12 @@ const Home = () => {
 
         {/* CTA button (same colour as screenshot) */}
         <motion.div
-          initial={{ opacity: 0, y: 25 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 1 }}
-          className="hidden sm:flex items-center bg-white backdrop-blur-md border border-gray-300 rounded-full px-4! py-1.5! w-80!"
+          transition={{ duration: 1.2, delay: 0.8 }}
+          className="text-text-primary-gray inline-flex text-center gap-2 bg-white/60 px-6! py-1! rounded-full border border-neutral-300"
         >
-          <input
-            type="text"
-            placeholder="Search"
-            className="bg-transparent outline-none w-full text-sm"
-          />
+          <p >📖 Discover your best books here.</p>
         </motion.div>
       </motion.div>
     </section>

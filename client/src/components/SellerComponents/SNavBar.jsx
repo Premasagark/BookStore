@@ -14,9 +14,9 @@ const SNavBar = () => {
 
   const items = [
     { name: "Home", Link: "/seller" },
-    { name: "My Products", Link: "/seller/product" },
+    { name: "My Products", Link: "/seller/products" },
     { name: "Add Book", Link: "/seller/add-book" },
-    { name: "Orders", Link: "" },
+    { name: "Orders", Link: "/seller/orders" },
   ];
 
   const navigate = useNavigate();

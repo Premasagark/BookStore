@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 
+
 const ProtectedRoute = ({ allowedRoles }) => {
   const { token, role } = useContext(AppContext); // role is lowercase: "admin" | "seller" | "user"
 
@@ -13,7 +14,10 @@ const ProtectedRoute = ({ allowedRoles }) => {
 
   if (allowedRoles && !allowedRoles.includes(role)) {
     // logged in but wrong role
-    return <Navigate to="/" replace />;
+    if (role === "admin") return <Navigate to="/admin" replace />;
+    if (role === "seller") return <Navigate to="/seller" replace />;
+    if (role === "user") return <Navigate to="/" replace />;
+    
   }
 
   // ok

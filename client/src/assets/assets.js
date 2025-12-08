@@ -26,13 +26,37 @@ import kokoro from './Books/kokoro_book.png'
 import ratan_tata from './Books/ratan_tata.jpg'
 import jungle_book from './Books/the_Jungle_book.jpg'
 import zen from './Books/Zen_book.jpg'
+import admin_dashboard from "./admin_dashboard.png";
+import admin_dashboard2 from "./admin_dashboard2.png";
+
 import person_icon from './person_icon.png'
 import mail_icon from './mail_icon.png'
+import shopping_bag from './shopping_bag.png'
 import lock_icon from './lock_icon.png'
 import close_icon from './close_icon.png'
-import shopping_bag from './shopping_bag.png'
 import favorite_icon from './favorite_icon.png'
 import menu_icon from './menu_icon.png'
+import delete_icon from "./delete_icon.png";
+
+// Genres images
+import science from "./Genre_images/science.jpg";
+import education from "./Genre_images/education.jpg";
+import fantasy from "./Genre_images/fantasy.jpg";
+import productivity from "./Genre_images/productivity.png";
+import children from "./Genre_images/children.jpg";
+import business from "./Genre_images/business.jpg";
+import novel from "./Genre_images/novel.jpg";
+import literature from "./Genre_images/literature.jpg";
+import story from "./Genre_images/story.jpg";
+import poetry from "./Genre_images/poetry.jpg";
+import history from "./Genre_images/history.jpg";
+import biography from "./Genre_images/biography.jpg";
+import self_help from "./Genre_images/self_help.jpg";
+import travel from "./Genre_images/travel.jpg";
+
+
+
+
 
 const books = {
     desanthiri,
@@ -69,6 +93,9 @@ export const assets = {
     shop_online,
     sprinkle,
     infinity_scroll_img,
+    admin_dashboard,
+    admin_dashboard2,
+
     mail_icon,
     person_icon,
     lock_icon,
@@ -76,7 +103,44 @@ export const assets = {
     shopping_bag,
     favorite_icon,
     menu_icon,
+    delete_icon,
 
     stranger_again,
     books
 }
+
+
+
+export const ALL_GENRES = [
+  "Science",
+  "Education",
+  "Fantasy",
+  "Productivity",
+  "Children",
+  "Business",
+  "Novels",
+  "Literature",
+  "Story",
+  "Poetry",
+  "History",
+  "Biography",
+  "Self-Help",
+  "Travel",
+];
+
+export const GENRES_IMAGES = {
+  "Science": science,
+  "Education": education,
+  "Fantasy": fantasy,
+  "Productivity": productivity,
+  "Children": children,
+  "Business": business,
+  "Novels": novel,
+  "Literature": literature,
+  "Story": story,
+  "Poetry": poetry,
+  "History": history,
+  "Biography": biography,
+  "Self-Help": self_help,
+  "Travel": travel,
+};

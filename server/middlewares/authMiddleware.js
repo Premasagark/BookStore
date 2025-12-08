@@ -10,6 +10,7 @@ export const requireAuth = (allowedRoles = []) => {
 
     try {
       const decoded = jwt.verify(token, JWT_SECRET);
+      console.log("JWT payload:", decoded);
       req.user = decoded; // { id, role, iat, exp }
 
       if (allowedRoles.length > 0 && !allowedRoles.includes(decoded.role)) {

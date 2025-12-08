@@ -9,6 +9,7 @@ const BookSchema = new mongoose.Schema(
     description: String,
     price: { type: Number, required: true },
     itemImage: String,
+    pages: { type: Number, min: 100 },
 
     // stock management
     stockStatus: {

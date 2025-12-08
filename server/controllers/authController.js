@@ -48,6 +48,7 @@ export const signup = async (req, res) => {
 
     const token = signToken({
       id: doc._id,
+      name: doc.name,
       role: ROLE_CLAIM[roleKey],
     });
 
@@ -84,8 +85,10 @@ export const login = async (req, res) => {
       return res.status(401).json({ success:false, message: "Invalid credentials" });
     }
 
+
     const token = signToken({
       id: doc._id,
+      name: doc.name,
       role: ROLE_CLAIM[roleKey],
     });
 
