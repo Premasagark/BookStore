@@ -5,6 +5,7 @@ import { AppContext } from "../../context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { getBookImage } from "../../utils/imageHelper";
+import { useNavigate } from "react-router-dom";
 
 const UWishlist = () => {
   const {
@@ -19,6 +20,7 @@ const UWishlist = () => {
   } = useContext(AppContext);
 
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
@@ -203,7 +205,9 @@ const UWishlist = () => {
                             Add to Cart
                           </button>
                           <a
-                            href={`/books/${item.bookId || id}`}
+                            onClick={() =>
+                              navigate(`/books/${item.bookId || id}`)
+                            }
                             className="w-full! py-2! px-4! block! text-center! text-xs! font-medium! text-gray-700! border! border-gray-300! rounded-lg! hover:bg-gray-50! hover:border-primary-btn! transition-all!"
                           >
                             View Details

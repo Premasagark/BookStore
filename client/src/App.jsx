@@ -17,7 +17,7 @@ import UOrders from "./pages/User/UOrders.jsx";
 import UOrderDetails from "./pages/User/UOrderDetails.jsx";
 
 import AUsersList from "./pages/Admin/AUsersList.jsx";
-import ABooks from "./pages/Admin/Abooks.jsx";
+import ABooks from "./pages/Admin/ABooks.jsx";
 import ASellersList from "./pages/Admin/ASellersList.jsx";
 
 import SHome from "./pages/Seller/SHome.jsx";

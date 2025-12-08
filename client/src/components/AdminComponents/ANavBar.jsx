@@ -14,6 +14,7 @@ const ANavBar = () => {
     { name: "Home", Link: "/admin" },
     { name: "Users", Link: "/admin/users" },
     { name: "Sellers", Link: "/admin/sellers" },
+    { name: "Books", Link: "/admin/books" },
   ];
 
 
