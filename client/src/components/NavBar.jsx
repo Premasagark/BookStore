@@ -100,7 +100,7 @@ const NavBar = () => {
           setShowResults(false);
         }}
       >
-        Book
+        BooksMall
       </h1>
 
       {/* Desktop Menu (lg+) */}

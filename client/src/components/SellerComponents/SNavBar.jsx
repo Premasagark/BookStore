@@ -27,7 +27,7 @@ const SNavBar = () => {
       <nav className="h-20 bg-transparent flex justify-between items-center px-6! md:px-12! relative">
         {/* Logo */}
         <h1 className="text-3xl text-teal-500 font-bold">
-          Book <span className="text-sm font-light">(Seller Panel)</span>
+          BooksMall <span className="text-sm font-light">(Seller Panel)</span>
         </h1>
 
         {/* Desktop Menu */}
